@@ -1,55 +1,88 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, inject, signal } from '@angular/core';
-
-interface Pokemon {
-  id: number;
-  name: string;
-  base_experience: number;
-  height: number;
-  is_default: boolean;
-  order: number;
-  weight: number;
-  sprites: {
-    other?: {
-      'official-artwork'?: {
-        front_default: string | null;
-      };
-    };
-    front_default: string | null;
-  };
-  types: Array<{
-    type: {
-      name: string;
-    };
-  }>;
-}
+import { HttpErrorResponse } from '@angular/common/http';
+import { JsonPipe } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
+import { ApiService, Pokemon } from './api.service';
 
 @Component({
+  imports: [JsonPipe],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App implements OnInit {
-  private readonly http = inject(HttpClient);
+export class App {
+  private readonly api = inject(ApiService);
   protected readonly pokemon = signal<Pokemon | null>(null);
   protected readonly loading = signal(true);
-  protected readonly error = signal(false);
+  protected readonly error = signal('');
+  protected readonly query = signal('ditto');
+  protected readonly apiUrl = computed(() => {
+    const pokemon = this.pokemon();
+    return pokemon ? `${this.api.baseUrl}/pokemon/${pokemon.name}/` : this.api.baseUrl;
+  });
+  protected readonly imageGallery = computed(() => {
+    const sprites = this.pokemon()?.sprites;
+    if (!sprites) {
+      return [];
+    }
 
-  ngOnInit(): void {
-    this.loadPokemon();
+    const candidates = [
+      { label: 'Ilustración oficial', url: sprites.other?.['official-artwork']?.front_default },
+      { label: 'Vista frontal', url: sprites.front_default },
+      { label: 'Vista posterior', url: sprites.back_default },
+      { label: 'Vista frontal variocolor', url: sprites.front_shiny },
+      { label: 'Vista posterior variocolor', url: sprites.back_shiny },
+      { label: 'Ilustración Home', url: sprites.other?.home?.front_default },
+      { label: 'Ilustración Dream World', url: sprites.other?.dream_world?.front_default },
+      { label: 'Animación frontal', url: sprites.other?.showdown?.front_default },
+      { label: 'Animación posterior', url: sprites.other?.showdown?.back_default },
+    ];
+    const seen = new Set<string>();
+
+    return candidates.filter((image): image is { label: string; url: string } => {
+      if (!image.url || seen.has(image.url)) {
+        return false;
+      }
+
+      seen.add(image.url);
+      return true;
+    });
+  });
+
+  constructor() {
+    this.loadPokemon('ditto');
   }
 
-  protected loadPokemon(): void {
-    this.loading.set(true);
-    this.error.set(false);
+  protected onSearchInput(event: Event): void {
+    if (event.target instanceof HTMLInputElement) {
+      this.query.set(event.target.value);
+    }
+  }
 
-    this.http.get<Pokemon>('https://pokeapi.co/api/v2/pokemon/ditto/').subscribe({
+  protected searchPokemon(): void {
+    this.loadPokemon(this.query());
+  }
+
+  protected loadPokemon(identifier: string): void {
+    const normalizedIdentifier = identifier.trim();
+    if (!normalizedIdentifier) {
+      this.error.set('Escribe el nombre o número de un Pokémon para buscarlo.');
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set('');
+
+    this.api.getPokemon(normalizedIdentifier).subscribe({
       next: (pokemon) => {
         this.pokemon.set(pokemon);
         this.loading.set(false);
       },
-      error: () => {
-        this.error.set(true);
+      error: (error: HttpErrorResponse) => {
+        this.error.set(
+          error.status === 404
+            ? `No encontramos "${normalizedIdentifier}". Revisa el nombre o número e inténtalo otra vez.`
+            : 'No pudimos conectar con la PokéAPI. Comprueba tu conexión e inténtalo de nuevo.',
+        );
         this.loading.set(false);
       },
     });

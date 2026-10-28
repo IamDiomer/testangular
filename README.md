@@ -2,6 +2,12 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.5.
 
+## Buscador de Pokémon
+
+La aplicación consulta Pokémon por nombre o número desde la [PokéAPI](https://pokeapi.co/). El campo de búsqueda acepta, por ejemplo, `pikachu`, `charizard` o `25`. La ficha muestra sus datos, estadísticas, tipos, habilidades, movimientos e imágenes disponibles; también permite desplegar la respuesta completa de la API.
+
+La URL base y las consultas HTTP están centralizadas en [`src/app/api.service.ts`](./src/app/api.service.ts).
+
 ## Development server
 
 To start a local development server, run:
