@@ -1,7 +1,3 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-
 export interface Pokemon {
   id: number;
   name: string;
@@ -47,15 +43,4 @@ export interface Pokemon {
   };
   stats: Array<{ base_stat: number; effort: number; stat: { name: string; url: string } }>;
   types: Array<{ slot: number; type: { name: string; url: string } }>;
-}
-
-@Injectable({ providedIn: 'root' })
-export class ApiService {
-  readonly baseUrl = 'https://pokeapi.co/api/v2';
-  private readonly http = inject(HttpClient);
-
-  getPokemon(identifier: string): Observable<Pokemon> {
-    const pokemon = encodeURIComponent(identifier.trim().toLowerCase());
-    return this.http.get<Pokemon>(`${this.baseUrl}/pokemon/${pokemon}/`);
-  }
 }
