@@ -1,11 +1,27 @@
 import { JsonPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+import { ChipModule } from 'primeng/chip';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TagModule } from 'primeng/tag';
 import { Pokemon } from '../../models/pokemon.model';
 import { PokemonService } from '../../services/pokemon.service';
 
 @Component({
-  imports: [JsonPipe],
+  imports: [
+    ButtonModule,
+    ChipModule,
+    InputTextModule,
+    JsonPipe,
+    MessageModule,
+    ProgressBarModule,
+    ProgressSpinnerModule,
+    TagModule,
+  ],
   selector: 'app-pokemon',
   styleUrl: './pokemon.component.css',
   templateUrl: './pokemon.component.html',

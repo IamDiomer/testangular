@@ -169,27 +169,6 @@ main {
   letter-spacing: 1.45px;
 }
 
-.type-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 12px;
-  border: 1px solid #e7e2f1;
-  border-radius: 20px;
-  background: rgb(255 255 255 / 70%);
-  color: #7f729f;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.type-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #ad9bd6;
-}
-
 .artwork-stage {
   position: absolute;
   inset: 56px 10px 49px;
@@ -459,13 +438,11 @@ main {
 }
 
 .loader {
+  display: grid;
   width: 34px;
   height: 34px;
   margin-bottom: 11px;
-  border: 3px solid #eeeaf7;
-  border-top-color: #8c7cce;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  place-items: center;
 }
 
 .error-icon {
@@ -640,24 +617,6 @@ main {
   gap: 8px;
 }
 
-.detail-chip,
-.move-chip {
-  padding: 7px 10px;
-  border: 1px solid #eeebf4;
-  border-radius: 8px;
-  background: #fcfbfd;
-  color: #777287;
-  font-size: 11px;
-  text-transform: capitalize;
-}
-
-.type-chip {
-  border-color: #e6def5;
-  background: #f4f0fb;
-  color: #806cb7;
-  font-weight: 600;
-}
-
 .base-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -692,13 +651,6 @@ main {
   overflow: hidden;
   border-radius: 5px;
   background: #f0edf5;
-}
-
-.stat-track span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #aa99df, #7dca9d);
 }
 
 .image-gallery {
@@ -760,13 +712,6 @@ main {
   font-size: 11px;
 }
 
-.more-moves {
-  border-color: #e6def5;
-  background: #f4f0fb;
-  color: #806cb7;
-  font-weight: 600;
-}
-
 .raw-data {
   margin-top: 22px;
   border-top: 1px solid #efedf3;
@@ -790,12 +735,6 @@ main {
   font-size: 10px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 @keyframes float {

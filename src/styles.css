@@ -25,3 +25,60 @@ button,
 a {
   font: inherit;
 }
+
+.type-list .p-tag.type-badge {
+  gap: 7px;
+  padding: 7px 12px;
+  border: 1px solid #e7e2f1;
+  border-radius: 20px;
+  background: rgb(255 255 255 / 70%);
+  color: #7f729f;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.type-list .p-tag.type-badge .p-tag-icon {
+  color: #ad9bd6;
+  font-size: 6px;
+}
+
+.detail-chips .p-chip.detail-chip,
+.move-list .p-chip.move-chip {
+  padding: 7px 10px;
+  border: 1px solid #eeebf4;
+  border-radius: 8px;
+  background: #fcfbfd;
+  color: #777287;
+  font-size: 11px;
+  text-transform: capitalize;
+}
+
+.detail-chips .p-chip.type-chip,
+.move-list .p-chip.more-moves {
+  border-color: #e6def5;
+  background: #f4f0fb;
+  color: #806cb7;
+  font-weight: 600;
+}
+
+.stat-track .stat-progress {
+  height: 100%;
+  border-radius: inherit;
+  background: transparent;
+}
+
+.stat-track .stat-progress .p-progressbar-value {
+  border-radius: inherit;
+  background: linear-gradient(90deg, #aa99df, #7dca9d);
+}
+
+.loader .p-progressspinner {
+  width: 34px;
+  height: 34px;
+}
+
+.error-card .error-message {
+  max-width: 90%;
+  margin-top: 7px;
+}

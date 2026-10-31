@@ -17,8 +17,9 @@
     <form class="search-form" (submit)="$event.preventDefault(); searchPokemon()">
       <label class="search-label" for="pokemon-search">BUSCAR POKÉMON</label>
       <div class="search-controls">
-        <span class="search-icon" aria-hidden="true">⌕</span>
+        <i class="pi pi-search search-icon" aria-hidden="true"></i>
         <input
+          pInputText
           id="pokemon-search"
           type="search"
           [value]="query()"
@@ -27,7 +28,7 @@
           placeholder="Ej. pikachu, charizard o 25"
           autocomplete="off"
         />
-        <button type="submit" [disabled]="loading()">Buscar</button>
+        <button pButton type="submit" [disabled]="loading()" [loading]="loading()">Buscar</button>
       </div>
       <div class="quick-searches" aria-label="Búsquedas populares">
         <span>Prueba:</span>
@@ -39,14 +40,14 @@
 
     @if (loading()) {
       <section class="state-card" aria-live="polite">
-        <div class="loader" aria-hidden="true"></div>
+        <p-progress-spinner class="loader" ariaLabel="Buscando Pokémon" />
         <p>Buscando datos del Pokémon...</p>
       </section>
     } @else if (error(); as errorMessage) {
       <section class="state-card error-card" aria-live="assertive">
         <div class="error-icon" aria-hidden="true">!</div>
         <h2>No encontramos ese Pokémon</h2>
-        <p>{{ errorMessage }}</p>
+        <p-message severity="error" styleClass="error-message">{{ errorMessage }}</p-message>
       </section>
     } @else if (pokemon(); as creature) {
       <section class="pokemon-card" [attr.aria-label]="'Ficha de ' + creature.name">
@@ -55,7 +56,12 @@
             <span class="record-label">REGISTRO N.º {{ creature.id }}</span>
             <div class="type-list">
               @for (entry of creature.types; track entry.type.name) {
-                <span class="type-badge"><span class="type-dot"></span> {{ entry.type.name }}</span>
+                <p-tag
+                  [value]="entry.type.name"
+                  icon="pi pi-circle-fill"
+                  severity="info"
+                  styleClass="type-badge"
+                />
               }
             </div>
           </div>
@@ -124,10 +130,13 @@
         <div class="section-heading"><span>TIPOS Y HABILIDADES</span><span class="heading-rule"></span></div>
         <div class="detail-chips">
           @for (entry of creature.types; track entry.type.name) {
-            <span class="detail-chip type-chip">{{ entry.type.name }}</span>
+            <p-chip [label]="entry.type.name" styleClass="detail-chip type-chip" />
           }
           @for (entry of creature.abilities; track entry.ability.name) {
-            <span class="detail-chip">{{ entry.ability.name }}{{ entry.is_hidden ? ' · oculta' : '' }}</span>
+            <p-chip
+              [label]="entry.ability.name + (entry.is_hidden ? ' · oculta' : '')"
+              styleClass="detail-chip"
+            />
           }
         </div>
 
@@ -137,7 +146,12 @@
             <div class="base-stat">
               <span>{{ entry.stat.name.replace('-', ' ') }}</span>
               <strong>{{ entry.base_stat }}</strong>
-              <div class="stat-track"><span [style.width.%]="entry.base_stat > 100 ? 100 : entry.base_stat"></span></div>
+              <p-progressbar
+                class="stat-track"
+                [value]="entry.base_stat > 100 ? 100 : entry.base_stat"
+                [showValue]="false"
+                styleClass="stat-progress"
+              />
               <small>Esfuerzo: {{ entry.effort }}</small>
             </div>
           }
@@ -169,10 +183,10 @@
         <div class="section-heading detail-heading"><span>MOVIMIENTOS</span><span class="heading-rule"></span></div>
         <div class="move-list">
           @for (entry of creature.moves.slice(0, 24); track entry.move.name) {
-            <span class="move-chip">{{ entry.move.name.replace('-', ' ') }}</span>
+            <p-chip [label]="entry.move.name.replace('-', ' ')" styleClass="move-chip" />
           }
           @if (creature.moves.length > 24) {
-            <span class="move-chip more-moves">+ {{ creature.moves.length - 24 }} más</span>
+            <p-chip [label]="'+ ' + (creature.moves.length - 24) + ' más'" styleClass="move-chip more-moves" />
           }
         </div>
 
